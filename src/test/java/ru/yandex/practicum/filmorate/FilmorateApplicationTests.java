@@ -272,7 +272,7 @@ class FilmorateApplicationTests {
 					}
 				});
 
-		assertEquals("Логин не указан или содержит одни пробелы", exception.getMessage());
+		assertEquals("Логин не указан", exception.getMessage());
 
 	}
 
@@ -287,13 +287,13 @@ class FilmorateApplicationTests {
 					@Override
 					public void execute() {
 						User user = new User("aaa@bbb",
-								"      ",
+								"фф ",
 								LocalDate.of(1985, 2, 8));
 						userManager.create(user);
 					}
 				});
 
-		assertEquals("Логин не указан или содержит одни пробелы", exception.getMessage());
+		assertEquals("Логин не может содержать пробелы", exception.getMessage());
 
 	}
 

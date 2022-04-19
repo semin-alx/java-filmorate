@@ -21,7 +21,7 @@ public class FilmController {
             log.info("Добавлен новый фильм: " + film.toString());
         } catch (RuntimeException e) {
             log.warn("Ошибка добавления фильма: " + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -32,7 +32,7 @@ public class FilmController {
             log.info("Фильм обновлен: " + film.toString());
         } catch (RuntimeException e) {
             log.warn("Ошибка обновления фильма: " + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 

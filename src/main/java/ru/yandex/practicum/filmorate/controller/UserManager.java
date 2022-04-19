@@ -22,8 +22,11 @@ public class UserManager {
     }
 
     private void validateLogin(String login) {
-        if (login.trim().isEmpty()) {
-            throw new ValidationException("Логин не указан или содержит одни пробелы");
+        if (login.isEmpty()) {
+            throw new ValidationException("Логин не указан");
+        }
+        if (login.contains(" ")) {
+            throw new ValidationException("Логин не может содержать пробелы");
         }
     }
 

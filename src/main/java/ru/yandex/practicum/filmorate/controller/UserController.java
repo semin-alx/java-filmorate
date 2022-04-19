@@ -21,7 +21,7 @@ public class UserController {
             log.info("Добавлен новый пользователь: " + user.toString());
         } catch (RuntimeException e) {
             log.warn("Ошибка добавления пользователя: " + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
     }
@@ -33,7 +33,7 @@ public class UserController {
             log.info("Пользователь обновлен: " + user.toString());
         } catch (RuntimeException e) {
             log.warn("Ошибка обновления пользователя: " + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
     }

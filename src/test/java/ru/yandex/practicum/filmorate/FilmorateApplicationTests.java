@@ -7,26 +7,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.controller.FilmManager;
-import ru.yandex.practicum.filmorate.controller.UserManager;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.ItemManager;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalUnit;
 import java.util.Collections;
 
 @SpringBootTest
 class FilmorateApplicationTests {
 
-	private static UserManager userManager;
-	private static FilmManager filmManager;
+	private static ItemManager<User> userManager;
+	private static ItemManager<Film> filmManager;
 
 	@BeforeAll
 	private static void init() {
-		userManager = new UserManager();
-		filmManager = new FilmManager();
+		userManager = new ItemManager<>();
+		filmManager = new ItemManager<>();
 	}
 
 	@BeforeEach
@@ -108,7 +106,7 @@ class FilmorateApplicationTests {
 				LocalDate.of(1974, 9, 14),
 				100);
 		filmManager.create(film);
-		assertEquals(1, filmManager.getFilms().size());
+		assertEquals(1, filmManager.getItems().size());
 
 	}
 
@@ -119,7 +117,7 @@ class FilmorateApplicationTests {
 				LocalDate.of(1974, 9, 14),
 				100);
 		filmManager.create(film);
-		assertEquals(1, filmManager.getFilms().size());
+		assertEquals(1, filmManager.getItems().size());
 
 	}
 
@@ -129,7 +127,7 @@ class FilmorateApplicationTests {
 				LocalDate.of(1974, 9, 14),
 				100);
 		filmManager.create(film);
-		assertEquals(1, filmManager.getFilms().size());
+		assertEquals(1, filmManager.getItems().size());
 	}
 
 	@Test
@@ -138,7 +136,7 @@ class FilmorateApplicationTests {
 				LocalDate.of(1895, 12, 28),
 				100);
 		filmManager.create(film);
-		assertEquals(1, filmManager.getFilms().size());
+		assertEquals(1, filmManager.getItems().size());
 	}
 
 	@Test
@@ -189,7 +187,7 @@ class FilmorateApplicationTests {
 				LocalDate.of(1895, 12, 28),
 				0);
 		filmManager.create(film);
-		assertEquals(1, filmManager.getFilms().size());
+		assertEquals(1, filmManager.getItems().size());
 	}
 
 	@Test
@@ -347,7 +345,7 @@ class FilmorateApplicationTests {
 
 		userManager.create(user);
 
-		assertEquals(1, userManager.getUsers().size());
+		assertEquals(1, userManager.getItems().size());
 	}
 
 }

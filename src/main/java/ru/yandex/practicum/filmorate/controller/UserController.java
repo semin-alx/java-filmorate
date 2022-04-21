@@ -1,10 +1,12 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FilmorateService;
 
 import java.util.List;
 
@@ -12,12 +14,13 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    UserManager manager = new UserManager();
+    @Autowired
+    FilmorateService mainService;
 
     @PostMapping(value = "/users")
     public void create(@RequestBody User user) {
         try {
-            manager.create(user);
+            mainService.getUserManager().create(user);
             log.info("Добавлен новый пользователь: " + user.toString());
         } catch (RuntimeException e) {
             log.warn("Ошибка добавления пользователя: " + e.getMessage());
@@ -29,7 +32,7 @@ public class UserController {
     @PutMapping(value = "/users")
     public void update(@RequestBody User user) {
         try {
-            manager.update(user);
+            mainService.getUserManager().update(user);
             log.info("Пользователь обновлен: " + user.toString());
         } catch (RuntimeException e) {
             log.warn("Ошибка обновления пользователя: " + e.getMessage());
@@ -40,7 +43,7 @@ public class UserController {
 
     @GetMapping(value = "/users")
     public List<User> getList() {
-        return manager.getUsers();
+        return mainService.getUserManager().getItems();
     }
 
 

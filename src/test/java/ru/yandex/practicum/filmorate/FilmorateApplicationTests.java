@@ -10,7 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.ItemManager;
+import ru.yandex.practicum.filmorate.service.BaseService;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -18,19 +20,19 @@ import java.util.Collections;
 @SpringBootTest
 class FilmorateApplicationTests {
 
-	private static ItemManager<User> userManager;
-	private static ItemManager<Film> filmManager;
+	private static UserService userService;
+	private static FilmService filmService;
 
 	@BeforeAll
 	private static void init() {
-		userManager = new ItemManager<>();
-		filmManager = new ItemManager<>();
+		userService = new UserService();
+		filmService = new FilmService();
 	}
 
 	@BeforeEach
 	private void clearBeforeTest() {
-		userManager.clear();
-		filmManager.clear();
+		userService.clear();
+		filmService.clear();
 	}
 
 	@Test
@@ -47,7 +49,7 @@ class FilmorateApplicationTests {
 								"",
 								LocalDate.of(1974, 9, 14),
 								100);
-						filmManager.create(film);
+						filmService.create(film);
 					}
 				});
 
@@ -69,7 +71,7 @@ class FilmorateApplicationTests {
 								String.join("", Collections.nCopies(201, "A")),
 								LocalDate.of(1974, 9, 14),
 								100);
-						filmManager.create(film);
+						filmService.create(film);
 					}
 				});
 
@@ -91,7 +93,7 @@ class FilmorateApplicationTests {
 								String.join("", Collections.nCopies(250, "A")),
 								LocalDate.of(1974, 9, 14),
 								100);
-						filmManager.create(film);
+						filmService.create(film);
 					}
 				});
 
@@ -105,8 +107,8 @@ class FilmorateApplicationTests {
 				String.join("", Collections.nCopies(200, "A")),
 				LocalDate.of(1974, 9, 14),
 				100);
-		filmManager.create(film);
-		assertEquals(1, filmManager.getItems().size());
+		filmService.create(film);
+		assertEquals(1, filmService.getItems().size());
 
 	}
 
@@ -116,8 +118,8 @@ class FilmorateApplicationTests {
 				String.join("", Collections.nCopies(150, "A")),
 				LocalDate.of(1974, 9, 14),
 				100);
-		filmManager.create(film);
-		assertEquals(1, filmManager.getItems().size());
+		filmService.create(film);
+		assertEquals(1, filmService.getItems().size());
 
 	}
 
@@ -126,8 +128,8 @@ class FilmorateApplicationTests {
 		Film film = new Film("Интерстеллар", "",
 				LocalDate.of(1974, 9, 14),
 				100);
-		filmManager.create(film);
-		assertEquals(1, filmManager.getItems().size());
+		filmService.create(film);
+		assertEquals(1, filmService.getItems().size());
 	}
 
 	@Test
@@ -135,8 +137,8 @@ class FilmorateApplicationTests {
 		Film film = new Film("Интерстеллар", "",
 				LocalDate.of(1895, 12, 28),
 				100);
-		filmManager.create(film);
-		assertEquals(1, filmManager.getItems().size());
+		filmService.create(film);
+		assertEquals(1, filmService.getItems().size());
 	}
 
 	@Test
@@ -152,7 +154,7 @@ class FilmorateApplicationTests {
 						Film film = new Film("Интерстеллар", "",
 								LocalDate.of(1895, 12, 27),
 								100);
-						filmManager.create(film);
+						filmService.create(film);
 					}
 				});
 
@@ -173,7 +175,7 @@ class FilmorateApplicationTests {
 						Film film = new Film("Интерстеллар", "",
 								LocalDate.of(1885, 1, 1),
 								100);
-						filmManager.create(film);
+						filmService.create(film);
 					}
 				});
 
@@ -186,8 +188,8 @@ class FilmorateApplicationTests {
 		Film film = new Film("Интерстеллар", "",
 				LocalDate.of(1895, 12, 28),
 				0);
-		filmManager.create(film);
-		assertEquals(1, filmManager.getItems().size());
+		filmService.create(film);
+		assertEquals(1, filmService.getItems().size());
 	}
 
 	@Test
@@ -203,7 +205,7 @@ class FilmorateApplicationTests {
 						Film film = new Film("Интерстеллар", "",
 								LocalDate.of(1974, 9, 14),
 								-1);
-						filmManager.create(film);
+						filmService.create(film);
 					}
 				});
 
@@ -224,7 +226,7 @@ class FilmorateApplicationTests {
 						Film film = new Film("Интерстеллар", "",
 								LocalDate.of(1974, 9, 14),
 								-100);
-						filmManager.create(film);
+						filmService.create(film);
 					}
 				});
 
@@ -245,7 +247,7 @@ class FilmorateApplicationTests {
 						User user = new User("aaa",
 								"login",
 								 LocalDate.of(1985, 2, 8));
-						userManager.create(user);
+						userService.create(user);
 					}
 				});
 
@@ -266,7 +268,7 @@ class FilmorateApplicationTests {
 						User user = new User("aaa@bbb",
 								"",
 								LocalDate.of(1985, 2, 8));
-						userManager.create(user);
+						userService.create(user);
 					}
 				});
 
@@ -287,7 +289,7 @@ class FilmorateApplicationTests {
 						User user = new User("aaa@bbb",
 								"фф ",
 								LocalDate.of(1985, 2, 8));
-						userManager.create(user);
+						userService.create(user);
 					}
 				});
 
@@ -308,7 +310,7 @@ class FilmorateApplicationTests {
 						User user = new User("aaa@bbb",
 								"login",
 								LocalDate.now().plusDays(1));
-						userManager.create(user);
+						userService.create(user);
 					}
 				});
 
@@ -328,7 +330,7 @@ class FilmorateApplicationTests {
 						User user = new User("aaa@bbb",
 								"login",
 								LocalDate.now().plusDays(100));
-						userManager.create(user);
+						userService.create(user);
 					}
 				});
 
@@ -343,9 +345,9 @@ class FilmorateApplicationTests {
 				"Diana",
 				LocalDate.of(1961, 7, 1));
 
-		userManager.create(user);
+		userService.create(user);
 
-		assertEquals(1, userManager.getItems().size());
+		assertEquals(1, userService.getItems().size());
 	}
 
 }

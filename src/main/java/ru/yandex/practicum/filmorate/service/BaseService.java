@@ -9,11 +9,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Простой менеджер позволяет управлять классами производными от Items
+ * Данный сервис определяет и выполняет базовый
+ * функционал для классов, производных от Item
  * На данный момент это будут классы Film и User
  * @param <T>
  */
-public class ItemManager<T extends Item> {
+public class BaseService<T extends Item> {
 
     private Map<Integer, T> items = new HashMap<>();
     private int idCounter = 0;

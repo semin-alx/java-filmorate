@@ -1,51 +1,40 @@
 package ru.yandex.practicum.filmorate.service;
 
-import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Item;
-
-import java.util.HashMap;
+import ru.yandex.practicum.filmorate.storage.BaseStorage;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * Данный сервис определяет и выполняет базовый
- * функционал для классов, производных от Item
- * На данный момент это будут классы Film и User
+ * Базовый сервис обеспечивающий общую функциональность при работе
+ * с объектами, производных от Item
  * @param <T>
  */
 public class BaseService<T extends Item> {
 
-    private Map<Integer, T> items = new HashMap<>();
-    private int idCounter = 0;
+    private BaseStorage<T> storage;
+
+    protected BaseStorage<T> getStorage() {
+        return storage;
+    }
+
+    public BaseService(BaseStorage<T> storage) {
+        this.storage = storage;
+    }
 
     public void create(T item) {
-        item.validate();
-        idCounter++;
-        item.setId(idCounter);
-        items.put(idCounter, item);
+        storage.create(item);
     }
 
     public void update(T item) {
-
-        if (!items.containsKey(item.getId())) {
-            throw new FilmNotFoundException("Элемент не найден");
-        }
-
-        item.validate();
-        items.put(item.getId(), item);
-
+        storage.update(item);
     }
 
     public List<T> getItems() {
-        return items.entrySet().stream()
-                .map(e -> e.getValue())
-                .collect(Collectors.toList());
+        return storage.getItems();
     }
 
-    public void clear() {
-        items.clear();
-        idCounter = 0;
+    public T getItemById(int id) {
+        return storage.getItemById(id);
     }
 
 }

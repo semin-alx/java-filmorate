@@ -53,8 +53,7 @@ public class UserController {
     }
 
     // В Т.З. метод PUT, в тестах POST
-    //@PutMapping("/users/{id}/friends/{friendId}")
-    @PostMapping("/users/{id}/friends/{friendId}")
+    @PutMapping("/users/{id}/friends/{friendId}")
     public void addFriends(@PathVariable int id, @PathVariable int friendId) {
         try {
             userService.addFriends(id, friendId);

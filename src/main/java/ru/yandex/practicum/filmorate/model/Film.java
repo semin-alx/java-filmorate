@@ -19,6 +19,7 @@ public class Film extends Item {
     private String name;
 
     @NonNull
+    @NotBlank(message = "Описание фильма не может быть пустым")
     @Size(max = 200, message = "Описание превышает допустимую длину")
     private String description;
 

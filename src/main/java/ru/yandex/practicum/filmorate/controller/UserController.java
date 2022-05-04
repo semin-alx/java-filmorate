@@ -34,10 +34,11 @@ public class UserController {
     }
 
     @PutMapping(value = "/users")
-    public void update(@RequestBody User user) {
+    public User update(@RequestBody User user) {
         try {
             userService.update(user);
             log.info("Пользователь обновлен: " + user.toString());
+            return user;
         } catch (RuntimeException e) {
             log.warn("Ошибка обновления пользователя: " + e.getMessage());
             throw e;

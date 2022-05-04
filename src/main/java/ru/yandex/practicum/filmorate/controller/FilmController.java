@@ -33,10 +33,11 @@ public class FilmController {
     }
 
     @PutMapping(value = "/films")
-    public void update(@Valid @RequestBody Film film) {
+    public Film update(@Valid @RequestBody Film film) {
         try {
             filmService.update(film);
             log.info("Фильм обновлен: " + film.toString());
+            return film;
         } catch (RuntimeException e) {
             log.warn("Ошибка обновления фильма: " + e.getMessage());
             throw e;

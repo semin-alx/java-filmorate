@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.BaseStorage;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,13 +15,14 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService extends BaseService<Film> {
 
-    private BaseStorage<User> userStorage;
+    private UserStorage userStorage;
 
     private void checkUserId(int id) {
         userStorage.getItemById(id); // Если такого id нет, будет исключение
     }
 
-    public FilmService(BaseStorage<Film> filmStorage, BaseStorage<User> userStorage) {
+    @Autowired
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
         super(filmStorage);
         this.userStorage = userStorage;
     }

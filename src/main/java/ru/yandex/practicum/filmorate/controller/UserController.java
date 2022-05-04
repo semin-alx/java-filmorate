@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
@@ -14,6 +15,7 @@ public class UserController {
 
     UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -52,7 +54,6 @@ public class UserController {
         return userService.getItemById(id);
     }
 
-    // В Т.З. метод PUT, в тестах POST
     @PutMapping("/users/{id}/friends/{friendId}")
     public void addFriends(@PathVariable int id, @PathVariable int friendId) {
         try {

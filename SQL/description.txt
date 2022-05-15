@@ -1,0 +1,158 @@
+-- Примечание к названиям первичных и внешних ключей
+-- первичные обозначим как id_<имя>, например id_user
+-- внешние обозначим как <name>_id, например user_id
+
+-- Таблица жанры фильмов
+
+CREATE TABLE genre (
+	id_genre INT,
+	name VARCHAR(100),
+	PRIMARY KEY (id_genre)
+);
+
+-- Рейтинг фильмов MPAA
+
+CREATE TABLE rating_mpaa (
+	id_mpaa VARCHAR(10), -- G, PG, PG-13 ...
+	descr VARCHAR(100),
+	PRIMARY KEY (id_mpaa)
+);
+
+-- Таблица фильмов
+
+CREATE TABLE film (
+	id_film INT,
+	name VARCHAR(100),
+	descr VARCHAR(200),
+	release_date DATE,
+	duration INT,
+	genre_id INT,
+	mpaa_id VARCHAR(10),
+	PRIMARY KEY (id_film),
+	FOREIGN KEY (genre_id) REFERENCES genre(id_genre),
+	FOREIGN KEY (mpaa_id) REFERENCES rating_mpaa(id_mpaa)
+);
+
+-- Таблица пользователей
+CREATE TABLE user (
+	id_user INT,
+	login VARCHAR(50),
+	name VARCHAR(100),
+	birthday DATE,
+	PRIMARY KEY (id_user)
+);
+
+-- Таблица для хранения лайков
+CREATE TABLE likes (
+	user_id INT,
+	film_id INT,
+	PRIMARY KEY (user_id, film_id),
+	FOREIGN KEY (user_id) REFERENCES user(id_user),
+	FOREIGN KEY (film_id) REFERENCES film(id_film)
+);
+
+
+-- Пояснения к алгоритму учета друзей ниже, после описания таблиц
+
+-- Таблица сущности "дружба" для двух пользователей
+-- status:  0 - запрос на дружбу
+--          1 - дружба
+-- В будущем, можно добавить дату начала дружбы, уровень дружбы, дату завершения дружбы :)
+CREATE TABLE friend_pair (
+	id_pair INT,
+	status INT,
+	PRIMARY KEY (id_pair)
+);
+
+-- Таблица запросов на дружбу
+CREATE TABLE friend_request (
+	id_request INT,
+	from_user_id INT,
+	to_user_id INT,
+	friend_pair_id INT,
+	PRIMARY KEY (id_request),
+	FOREIGN KEY (from_user_id) REFERENCES user(id_user),
+	FOREIGN KEY (to_user_id) REFERENCES user(id_user)
+);
+
+-- Пояснения к учету друзей
+--------------------------------------------------------------------
+-- Учет дружбы разбит на две таблицы:
+-- 1. friend_request - таблица запросов
+-- 2. friend_pair - таблица с уникальным идентификатором пары и статусом
+
+-- Выполним цепочку добавления в друзья
+
+-- 1. Пользователь с id_user = 10 делает запрос на дружбу для пользователя с id_user = 20
+
+-- добавим новую запись в friend_pair с status = 0 (Запрос в друзья)
+INSERT INTO friend_pair (id_pair, status) VALUES (1, 0)
+-- добавим запрос на дружбу
+INSERT INTO friend_request (id_request, from_user_id, to_user_id, friend_pair_id)
+  VALUES (1, 10, 20, 1)
+
+-- Посмотрим, какие запросы на дружбу (кому) отправил id_user = 10
+SELECT
+  friend_request.to_user_id
+FROM friend_pair
+INNER JOIN friend_request ON friend_request.friend_pair_id = friend_pair.id_pair
+WHERE friend_pair.status = 0
+  AND friend_request.from_user_id = 10
+
+-- Посмотрим, какие запросы на дружбу (от кого) получил id_user = 20
+SELECT
+  friend_request.from_user_id
+FROM friend_pair
+INNER JOIN friend_request ON friend_request.friend_pair_id = friend_pair.id_pair
+WHERE friend_pair.status = 0
+  AND friend_request.to_user_id = 20
+
+-- 2. Пользователь user_id = 20 подтверждает запрос на дружбу
+-- Добавим запись в таблицу запросов с противоположенным запросом от user_id = 20 для user_id = 10,
+-- но в поле friend_pair_id будем использовать существующую запись, которая была добавлена при первом запросе
+-- тем самым, мы имеем два запроса на дружбу, которые ссылаются на одну запись в таблице friend_pair
+-- дополнительно, изменим статус на 1 (Дружба)
+INSERT INTO friend_request (id_request, from_user_id, to_user_id, friend_pair_id)
+  VALUES (2, 20, 10, 1)
+
+UPDATE friend_pair SET status = 1 WHERE id_pair = 1
+
+-- 3. Посморим теперь всех друзей для user_id = 10
+SELECT
+  friend_request.to_user_id
+FROM friend_pair
+INNER JOIN friend_request ON friend_request.friend_pair_id = friend_pair.id_pair
+WHERE friend_pair.status = 1
+  AND friend_request.from_user_id = 10
+
+-- 4. А теперь всех друзей для user_id = 20
+SELECT
+  friend_request.to_user_id
+FROM friend_pair
+INNER JOIN friend_request ON friend_request.friend_pair_id = friend_pair.id_pair
+WHERE friend_pair.status = 1
+  AND friend_request.from_user_id = 20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

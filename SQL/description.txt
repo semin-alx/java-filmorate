@@ -93,7 +93,7 @@ WHERE (friend.user_id2 = 20) AND (friend.status = 0)
 SELECT u.*
 FROM friend
 INNER JOIN user u ON (u.user_id = friend.user_id1) OR (u.user_id = friend.user_id2)
-WHERE ((friend.user_id1 = 10) OR (friend.user_id2 = 10)) AND (u.user_id <> 10)
+WHERE ((friend.user_id1 = 10) OR (friend.user_id2 = 10)) AND (u.user_id <> 10) AND (friend.status = 1)
 
 Такой некрасивый запрос, это следствие упрощения друзей до одной таблицы.
 

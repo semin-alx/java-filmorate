@@ -9,4 +9,17 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
  */
 @Component
 public class InMemoryUserStorage extends InMemoryBaseStorage<User> implements UserStorage {
+
+    @Override
+    public void addFriend(int userId, int friendId) {
+        User user = getItemById(userId);
+        user.addFriend(friendId);
+    }
+
+    @Override
+    public void removeFriend(int userId, int friendId) {
+        User user = getItemById(userId);
+        user.removeFriend(friendId);
+    }
+
 }

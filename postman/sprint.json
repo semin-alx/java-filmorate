@@ -5269,7 +5269,6 @@
 									"    pm.expect(jsonData.releaseDate).to.eql('1989-04-17');\r",
 									"    pm.expect(jsonData.duration).to.eql(190);\r",
 									"    pm.expect(jsonData.mpa.id).to.eql(5);\r",
-									"    pm.expect(jsonData.mpa.name).null;\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -5484,7 +5483,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"id\": -1,\n  \"name\": \"Film Updated\",\n  \"releaseDate\": \"1989-04-17\",\n  \"description\": \"New film update decription\",\n  \"duration\": 190,\n  \"rate\": 4\n}",
+							"raw": "{\n  \"id\": -1,\n  \"name\": \"Film Updated\",\n  \"releaseDate\": \"1989-04-17\",\n  \"description\": \"New film update decription\",\n  \"duration\": 190,\n  \"mpa\": { \"id\": 5}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5718,7 +5717,7 @@
 									"    pm.expect(jsonData.description).to.eql('New film about friends');    \r",
 									"    pm.expect(jsonData.releaseDate).to.eql('1999-04-30');\r",
 									"    pm.expect(jsonData.duration).to.eql(120);\r",
-									"    pm.expect(jsonData.mpaId).to.eql(3);\r",
+									"    pm.expect(jsonData.mpa.id).to.eql(3);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -5739,7 +5738,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"New film\",\n  \"releaseDate\": \"1999-04-30\",\n  \"description\": \"New film about friends\",\n  \"duration\": 120,\n  \"rate\": 4,\n  \"mpaId\": 3\n}",
+							"raw": "{\n  \"name\": \"New film\",\n  \"releaseDate\": \"1999-04-30\",\n  \"description\": \"New film about friends\",\n  \"duration\": 120,\n  \"rate\": 4,\n  \"mpa\": { \"id\": 3}\n}",
 							"options": {
 								"raw": {
 									"language": "json"

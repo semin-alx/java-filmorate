@@ -86,6 +86,8 @@ public class FilmDao extends BaseDao implements FilmStorage {
     @Override
     public void update(Film item) {
 
+        checkFilmId(item.getId());
+
         getDb().update("UPDATE film SET name=?, descr=?, release_date=?, duration=?, " +
                 "mpa_id=? WHERE film_id=?", item.getName(), item.getDescription(),
                 item.getReleaseDate(), item.getDuration(), item.getMpa().getId(), item.getId());

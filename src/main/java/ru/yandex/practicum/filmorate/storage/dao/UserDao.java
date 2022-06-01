@@ -71,18 +71,12 @@ public class UserDao extends BaseDao implements UserStorage {
     }
 
     @Override
-    public void addFriend(int userId, int friendId) {
-       checkUserId(userId);
-       checkUserId(friendId);
-       getDb().update("INSERT INTO friend (user_id1, user_id2) VALUES (?,?)", userId, friendId);
+    public void checkUserId(int userId) {
+        SqlRowSet rows = getDb().queryForRowSet("SELECT 1 FROM user WHERE user_id = ?", userId);
+        if (!rows.next()) {
+            throw new ItemNotFoundException("Пользователь с указанным id не найден");
+        }
     }
 
-    @Override
-    public void removeFriend(int userId, int friendId) {
-        checkUserId(userId);
-        checkUserId(friendId);
-        getDb().update("DELETE FROM friend WHERE user_id1 = ? AND user_id2 = ?",
-                userId, friendId);
-    }
 
 }

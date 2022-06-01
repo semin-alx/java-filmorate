@@ -8,7 +8,6 @@ import java.util.List;
  * Интерфейс хранилища для объектов Film
  */
 public interface FilmStorage extends BaseStorage<Film> {
-    void addLike(int filmId, int userId);
-    void removeLike(int filmId, int userId);
     List<Film> getTopFilms(int count);
+    void checkFilmId(int filmId);
 }

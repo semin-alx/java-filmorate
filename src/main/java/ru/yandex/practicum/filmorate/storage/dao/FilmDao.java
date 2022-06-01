@@ -10,9 +10,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,14 +18,22 @@ import java.util.stream.Collectors;
 public class FilmDao extends BaseDao implements FilmStorage {
 
     private void updateGenreList(Film film) {
+
         getDb().update("DELETE FROM film_genre WHERE film_id=?", film.getId());
-        film.getGenreList().stream().forEach(new Consumer<Genre>() {
-            @Override
-            public void accept(Genre genre) {
-                getDb().update("INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?)",
-                        film.getId(), genre.getId());
+
+        String sqlValues = "";
+        for (Genre genre : film.getGenreList()) {
+            if (!sqlValues.isEmpty()) {
+                sqlValues = sqlValues + ',';
             }
-        });
+            sqlValues = sqlValues + String.format("(%d, %d)", film.getId(), genre.getId());
+        }
+
+        if (!sqlValues.isEmpty()) {
+            String sql = "INSERT INTO film_genre (film_id, genre_id) VALUES " + sqlValues;
+            getDb().update(sql);
+        }
+
     }
 
     private Mpa getMpa(int id) {
@@ -133,20 +139,6 @@ public class FilmDao extends BaseDao implements FilmStorage {
     }
 
     @Override
-    public void addLike(int filmId, int userId) {
-        checkFilmId(filmId);
-        checkUserId(userId);
-        getDb().update("INSERT INTO likes (film_id, user_id) VALUES (?,?)", filmId, userId);
-    }
-
-    @Override
-    public void removeLike(int filmId, int userId) {
-        checkFilmId(filmId);
-        checkUserId(userId);
-        getDb().update("DELETE FROM likes WHERE film_id = ? AND user_id = ?", filmId, userId);
-    }
-
-    @Override
     public List<Film> getTopFilms(int count) {
 
         return getDb().query("SELECT film.film_id, COUNT(likes.user_id) AS qty " +
@@ -158,4 +150,13 @@ public class FilmDao extends BaseDao implements FilmStorage {
           (rs, n) -> getItemById(rs.getInt("film_id")), count);
 
     }
+
+    @Override
+    public void checkFilmId(int filmId) {
+        SqlRowSet rows = getDb().queryForRowSet("SELECT 1 FROM film WHERE film_id = ?", filmId);
+        if (!rows.next()) {
+            throw new ItemNotFoundException("Фильм с указанным id не найден");
+        }
+    }
+
 }

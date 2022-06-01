@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.*;
+import ru.yandex.practicum.filmorate.storage.FriendStorage;
+import ru.yandex.practicum.filmorate.storage.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.dao.FilmDao;
 import ru.yandex.practicum.filmorate.storage.dao.UserDao;
 
@@ -20,6 +22,8 @@ public class FilmoRateApplicationTests {
 
     private final UserDao userStorage;
     private final FilmDao filmStorage;
+    private final FriendStorage friendStorage;
+    private final LikeStorage likeStorage;
 
     @Order(1)
     @Test
@@ -62,7 +66,7 @@ public class FilmoRateApplicationTests {
     @Test
     public void test_user_storage_add_friend() {
 
-        userStorage.addFriend(1, 2);
+        friendStorage.addFriend(1, 2);
         User user1 = userStorage.getItemById(1);
 
         Assertions.assertEquals(1, user1.getFriends().size());
@@ -73,7 +77,7 @@ public class FilmoRateApplicationTests {
     @Order(4)
     @Test
     public void test_user_storage_remove_friend() {
-        userStorage.removeFriend(1, 2);
+        friendStorage.removeFriend(1, 2);
         User user1 = userStorage.getItemById(1);
         Assertions.assertEquals(0, user1.getFriends().size());
     }
@@ -119,9 +123,9 @@ public class FilmoRateApplicationTests {
     @Test
     public void test_film_storage_add_like() {
 
-        filmStorage.addLike(2, 1);
-        filmStorage.addLike(2, 2);
-        filmStorage.addLike(2, 3);
+        likeStorage.addLike(2, 1);
+        likeStorage.addLike(2, 2);
+        likeStorage.addLike(2, 3);
 
         Film film2 = filmStorage.getItemById(2);
         Assertions.assertEquals(3, film2.getLikes().size());
@@ -131,7 +135,7 @@ public class FilmoRateApplicationTests {
     @Order(8)
     @Test
     public void test_film_storage_remove_like() {
-        filmStorage.removeLike(2, 3);
+        likeStorage.removeLike(2, 3);
         Film film2 = filmStorage.getItemById(2);
         Assertions.assertEquals(2, film2.getLikes().size());
     }

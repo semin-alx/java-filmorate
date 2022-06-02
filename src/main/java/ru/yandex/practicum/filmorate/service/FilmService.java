@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Сервис для фильмов
@@ -16,34 +16,31 @@ import java.util.stream.Collectors;
 public class FilmService extends BaseService<Film> {
 
     private UserStorage userStorage;
-
-    private void checkUserId(int id) {
-        userStorage.getItemById(id); // Если такого id нет, будет исключение
-    }
+    private FilmStorage filmStorage;
+    private LikeStorage likeStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage, LikeStorage likeStorage) {
         super(filmStorage);
         this.userStorage = userStorage;
+        this.filmStorage = filmStorage;
+        this.likeStorage = likeStorage;
     }
 
     public void like(int filmId, int userId) {
-        checkUserId(userId);
-        Film film = getStorage().getItemById(filmId);
-        film.addLike(userId);
+        filmStorage.checkFilmId(filmId);
+        userStorage.checkUserId(userId);
+        likeStorage.addLike(filmId, userId);
     }
 
     public void removeLike(int filmId, int userId) {
-        checkUserId(userId);
-        Film film = getStorage().getItemById(filmId);
-        film.removeLike(userId);
+        filmStorage.checkFilmId(filmId);
+        userStorage.checkUserId(userId);
+        likeStorage.removeLike(filmId, userId);
     }
 
     public List<Film> getTopFilms(int count) {
-        return getStorage().getItems().stream()
-                .sorted((o1, o2) -> o2.getLikes().size() - o1.getLikes().size())
-                .limit(count)
-                .collect(Collectors.toList());
+        return filmStorage.getTopFilms(count);
     }
 
 }

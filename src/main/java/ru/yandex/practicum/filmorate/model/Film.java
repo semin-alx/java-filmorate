@@ -4,10 +4,13 @@ import lombok.*;
 import ru.yandex.practicum.filmorate.validator.FilmReleaseDateConstraint;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -30,6 +33,11 @@ public class Film extends Item {
     @NonNull
     @Positive(message = "Неверное значение продолжительности фильма")
     private int duration;
+
+    @NotNull(message = "Не указан Mpa")
+    private Mpa mpa;
+
+    private List<Genre> genreList = new ArrayList<>();
 
     private Set<Integer> likes = new HashSet<>();
 

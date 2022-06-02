@@ -9,4 +9,10 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
  */
 @Component
 public class InMemoryUserStorage extends InMemoryBaseStorage<User> implements UserStorage {
+
+    @Override
+    public void checkUserId(int userId) {
+        getItemById(userId);
+    }
+
 }

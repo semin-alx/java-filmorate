@@ -12,6 +12,7 @@ public class InMemoryUserStorage extends InMemoryBaseStorage<User> implements Us
 
     @Override
     public void checkUserId(int userId) {
+        getItemById(userId);
     }
 
 }

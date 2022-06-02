@@ -15,17 +15,6 @@ import java.util.stream.Collectors;
 @Component
 public class InMemoryFilmStorage extends InMemoryBaseStorage<Film> implements FilmStorage {
 
-    private UserStorage userStorage;
-
-    private void checkUserId(int id) {
-        userStorage.getItemById(id); // Если такого id нет, будет исключение
-    }
-
-    @Autowired
-    public InMemoryFilmStorage(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
-
     @Override
     public List<Film> getTopFilms(int count) {
         return getItems().stream()
@@ -36,6 +25,7 @@ public class InMemoryFilmStorage extends InMemoryBaseStorage<Film> implements Fi
 
     @Override
     public void checkFilmId(int filmId) {
+        getItemById(filmId);
     }
 
 }
